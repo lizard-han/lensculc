@@ -37,22 +37,22 @@ st.markdown("""
 <style>
     /* 下拉选择框 */
     .stSelectbox [data-baseweb="select"] {
-        width: 200px;
+        width: 400px;
     }
     /* 数字输入框（带加减按钮的） */
     .stNumberInput {
-        width: 200px !important;
+        width: 400px !important;
     }
     .stNumberInput input {
-        width: 150px !important;
+        width: 400px !important;
     }
     /* 滑动条 */
     .stSlider [data-baseweb="slider"] {
-        width: 200px;
+        width: 400px;
     }
     /* 按钮 */
     .stButton button {
-        width: 200px;
+        width: 400px;
     }
 </style>
 """, unsafe_allow_html=True)
