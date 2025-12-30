@@ -100,7 +100,7 @@ if menu_selection == "镜头焦距计算":
     
     # 计算按钮
     st.subheader("计算")
-    calculate = st.button('计算焦距 Culc Focal Length')
+    calculate = st.button('计算焦距')
     
     # 计算逻辑
     if calculate:
@@ -176,7 +176,7 @@ elif menu_selection == "视场角与自定义参数4配置":
         
         # 计算按钮移至左下
         st.subheader("计算")
-        calculate_lpp = st.button('计算LPP参数 Culc LPP Params')
+        calculate_lpp = st.button('计算视场角与参数4')
     
     with col2:
         # 红外参数
@@ -259,7 +259,7 @@ elif menu_selection == "LPP配置参考":
     
     # 计算并显示结果
     if calculate_lpp_ref:
-        st.subheader("输出结果")
+        st.subheader("计算结果")
         custom_param7 = math.ceil(3.5 * max_fov / (ptz_speed * 60))
         custom_param6 = math.ceil(custom_param7 * 0.02)
         motion_coeff = math.ceil(custom_param7 * 1.5)
