@@ -168,7 +168,7 @@ elif menu_selection == "视场角与自定义参数4配置":
             [1920, 2560, 2688]
         )
         visible_focal = st.number_input(
-            "可见光镜头焦距 (mm)", 
+            "可见光镜头最小焦距 (mm)", 
             min_value=1.0, 
             value=25.0, 
             step=1.0
@@ -191,7 +191,7 @@ elif menu_selection == "视场角与自定义参数4配置":
             index=1
         )
         ir_focal = st.number_input(
-            "红外镜头焦距 (mm)", 
+            "红外镜头最小焦距 (mm)", 
             min_value=1.0, 
             value=25.0, 
             step=1.0
