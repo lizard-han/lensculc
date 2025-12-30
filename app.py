@@ -32,6 +32,31 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+# 自定义CSS缩短输入组件宽度（进一步缩小数字输入框）
+st.markdown("""
+<style>
+    /* 下拉选择框 */
+    .stSelectbox [data-baseweb="select"] {
+        width: 200px;
+    }
+    /* 数字输入框（带加减按钮的） */
+    .stNumberInput {
+        width: 200px !important;
+    }
+    .stNumberInput input {
+        width: 150px !important;
+    }
+    /* 滑动条 */
+    .stSlider [data-baseweb="slider"] {
+        width: 200px;
+    }
+    /* 按钮 */
+    .stButton button {
+        width: 200px;
+    }
+</style>
+""", unsafe_allow_html=True)
+
 # 左侧功能选择
 st.sidebar.header("功能选择 Function Selection")
 menu_selection = st.sidebar.radio(
@@ -51,7 +76,6 @@ if menu_selection == "镜头焦距计算":
     st.header("镜头焦距计算")
     st.markdown("### 请输入以下参数进行计算")
     
-    # 改为单列布局，移除columns拆分
     # 相机选择
     st.subheader("相机选择 Select Sensor")
     cam_selection = st.selectbox(
@@ -182,30 +206,22 @@ elif menu_selection == "视场角与自定义参数4配置":
         ir_h_fov = 2 * math.atan((ir_resolution * ir_pixel_size / 1000) / (2 * ir_focal)) * (180 / math.pi)
 
         #脱靶量协议
-        # 计算自定义参数4（使用提供的公式）
-        # 第一部分：ROUNDUP(E4*10/E3,0)
         part1 = math.ceil((visible_h_fov * 10) / ir_h_fov)
         
-        # 第二部分：ROUNDUP(IF(E4=60, 0, 100*E4/60),0)*256
-        # 考虑浮点数精度，使用近似判断是否等于60
         if abs(visible_h_fov - 60) < 1e-9:
             part2 = 0
         else:
             part2 = math.ceil((100 * visible_h_fov) / 60) * 256
         
-        # 总参数值
         param4_MD = part1 + part2
 
-
-        
         with st.expander("可见光参数结果", expanded=True):
             st.info(f"可见光水平视场角: {visible_h_fov:.2f}°")
         
         with st.expander("红外参数结果", expanded=True):
             st.info(f"红外水平视场角: {ir_h_fov:.2f}°")
         
-        # 计算 visible_h_fov *10 / ir_h_fov 并向上取整
-        if ir_h_fov != 0:  # 避免除以零错误
+        if ir_h_fov != 0:
             ratio = (visible_h_fov * 10) / ir_h_fov
             rounded_up = math.ceil(ratio)
             with st.expander("LPP协议下自定义参数4", expanded=True):
@@ -223,7 +239,7 @@ elif menu_selection == "LPP配置参考":
     
     # 输入参数
     st.subheader("输入参数")
-    col_input = st.columns(1)  # 单列显示输入
+    col_input = st.columns(1)
     with col_input[0]:
         max_fov = st.number_input(
             "相机最大视场角（°）",
@@ -239,19 +255,16 @@ elif menu_selection == "LPP配置参考":
             format="%.3f"
         )
         
-        
         calculate_lpp_ref = st.button("计算LPP配置参数")
     
     # 计算并显示结果
     if calculate_lpp_ref:
         st.subheader("输出结果")
-        # 计算各参数
         custom_param7 = math.ceil(3.5 * max_fov / (ptz_speed * 60))
         custom_param6 = math.ceil(custom_param7 * 0.02)
         motion_coeff = math.ceil(custom_param7 * 1.5)
         integral_coeff = math.ceil(motion_coeff * 0.03)
         
-        # 单列显示输出结果
         col_output = st.columns(1)
         with col_output[0]:
             st.info(f"自定义参数5: 1")
