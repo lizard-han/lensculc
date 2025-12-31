@@ -163,6 +163,18 @@ st.markdown("""
         box-shadow: 0 0 15px rgba(252, 0, 255, 0.8) !important;
     }
 
+    /* 仅将输入框和选择框的标签文字改为白色 */
+    .stNumberInput label,
+    .stSelectbox label {
+        color: #ffffff !important;
+    }
+
+    /* 确保输入框和选择框的内容保持黑色 */
+    .stNumberInput div[data-baseweb="input"] input,
+    .stSelectbox div[data-baseweb="select"] > div > div {
+        color: #000000 !important;
+    }
+
     /* ========== 修复1：侧边栏标题强制纯黑色 ========== */
     .sidebar .sidebar-content h1,
     .sidebar .sidebar-content h2,
