@@ -14,26 +14,32 @@ import config
 
 
 def load_lottieurl(url: str):
-    r = requests.get(url)
-    if r.status_code != 200:
+    try:
+        r = requests.get(url, timeout=10)
+        if r.status_code == 200:
+            return r.json()
+    except:
         return None
-    return r.json()
+    return None
 
 
 def load_lottiefile(filepath: str):
-    with open(filepath, 'r', encoding='utf-8') as f:
-        return json.load(f)
+    try:
+        with open(filepath, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except:
+        return None
 
 
 # ============================ 页面配置 ============================
 st.set_page_config(
     page_title="Tofu Intelligence Lens Culc",
-    page_icon='🔭',
+    page_icon='logo.png',
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# ============================ 炫酷CSS（仅优化侧边栏标题颜色） ============================
+# ============================ 炫酷CSS + 两大关键修复 ============================
 st.markdown("""
 <style>
     /* 深空科技背景 */
@@ -91,10 +97,7 @@ st.markdown("""
         font-size: 5.5rem !important;
         font-weight: 900 !important;
         color: #FFFFFF !important;
-        text-shadow: 
-            0 0 20px #FC00FF,
-            0 0 40px #FC00FF,
-            0 0 60px #00DBDE;
+        text-shadow: 0 0 20px #FC00FF, 0 0 40px #FC00FF, 0 0 60px #00DBDE;
         line-height: 1.2;
         margin: 20px 0;
     }
@@ -160,17 +163,30 @@ st.markdown("""
         box-shadow: 0 0 15px rgba(252, 0, 255, 0.8) !important;
     }
 
-    /* ========== 关键修改：侧边栏标题颜色改为高对比亮白 ========= */
-    /* 原Streamlit侧边栏标题默认颜色较暗，这里强制改为明亮易读的白色 */
-    .css-1d391kg h1, 
-    .css-1d391kg h2, 
-    .css-1d391kg h3,
+    /* ========== 修复1：侧边栏标题强制纯黑色 ========== */
     .sidebar .sidebar-content h1,
     .sidebar .sidebar-content h2,
-    .sidebar .sidebar-content h3 {
-        color: #FFFFFF !important;
-        text-shadow: 0 0 10px rgba(0, 10, 10, 0.1);
+    .sidebar .sidebar-content h3,
+    [data-testid="stSidebar"] h1,
+    [data-testid="stSidebar"] h2,
+    [data-testid="stSidebar"] h3,
+    .css-1d391kg h1,
+    .css-1d391kg h2,
+    .css-1d391kg h3 {
+        color: #000000 !important;
         font-weight: 700 !important;
+        text-shadow: none !important;
+    }
+
+    /* ========== 修复2：Lottie 动画背景彻底透明（最强覆盖） ========== */
+    [data-testid="stLottie"],
+    .stLottie,
+    .element-container iframe,
+    canvas,
+    .lottie-container,
+    div[data-testid="column"] > div > div > div {
+        background: transparent !important;
+        background-color: transparent !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -180,27 +196,25 @@ ai_gif = load_lottiefile('lens.json')
 if not ai_gif:
     ai_gif = load_lottieurl("https://assets9.lottiefiles.com/packages/lf20_2gjwqmbb.json")
 
-# ============================ 侧边栏 ============================
-st.sidebar.header("🔭 功能选择 Function Selection")   # 这行文字现在会非常清晰
+# ============================ 侧边栏（标题已纯黑色） ============================
+st.sidebar.header("🔭 功能选择 Function Selection")
 menu_selection = st.sidebar.radio(
     "请选择功能",
     ["镜头焦距计算", "视场角与自定义参数4配置", "LPP配置参考"]
 )
 
-# ============================ 主标题 ============================
+# ============================ 主标题与动画（背景已透明） ============================
 col_lottie, col_title = st.columns([1, 3])
 with col_lottie:
     st_lottie(ai_gif, speed=1.5, height=400, key="Tofu")
 with col_title:
     st.markdown('<h1 class="neon-title">Tofu LensCulc</h1>', unsafe_allow_html=True)
-    st.markdown("<p style='text-align:center; font-size:1.4rem; color:#a0a0ff;'>专业光电载荷智能计算平台</p>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align:center; font-size:1.4rem; color:#a0a0ff;'>镜头焦距与云台参数在线计算</p>", unsafe_allow_html=True)
 
 st.markdown("## Product Wiki Site: [Tofu Wiki](https://tofuai.helplook.net)")
 st.markdown('<div class="cyber-divider"></div>', unsafe_allow_html=True)
 
-# ============================ 以下所有功能代码保持完全不变 ============================
-# （为了篇幅这里省略，直接复制你上一个版本的功能部分即可）
-
+# ============================ 功能1：镜头焦距计算 ============================
 if menu_selection == "镜头焦距计算":
     st.markdown('<h2>🔍 镜头焦距智能推荐</h2>', unsafe_allow_html=True)
     
@@ -236,9 +250,8 @@ if menu_selection == "镜头焦距计算":
         st.markdown(f'<div class="big-number">{int(Focal_Len)}</div>', unsafe_allow_html=True)
         st.markdown('<div class="big-number-unit">mm</div>', unsafe_allow_html=True)
         st.markdown("</div>", unsafe_allow_html=True)
-    else:
-        st.info('请选择参数后点击计算按钮')
 
+# ============================ 功能2：视场角与参数4配置 ============================
 elif menu_selection == "视场角与自定义参数4配置":
     st.markdown('<h2>📐 视场角与自定义参数4配置</h2>', unsafe_allow_html=True)
     
@@ -295,6 +308,7 @@ elif menu_selection == "视场角与自定义参数4配置":
         
         st.markdown("</div>", unsafe_allow_html=True)
 
+# ============================ 功能3：LPP配置参考 ============================
 elif menu_selection == "LPP配置参考":
     st.markdown('<h2>⚙️ LPP配置参考计算</h2>', unsafe_allow_html=True)
     
@@ -340,4 +354,4 @@ elif menu_selection == "LPP配置参考":
 
 # ============================ 页脚 ============================
 st.markdown('<div class="cyber-divider"></div>', unsafe_allow_html=True)
-st.markdown("<p style='text-align:center; color:#888; font-size:0.9rem;'>© 2025 Tofu Intelligence </p>", unsafe_allow_html=True)
+st.markdown("<p style='text-align:center; color:#888; font-size:0.9rem;'>© 2025 Tofu Intelligence</p>", unsafe_allow_html=True)
