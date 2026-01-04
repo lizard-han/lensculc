@@ -375,4 +375,4 @@ elif menu_selection == "LPP配置参考":
 
 # ============================ 页脚 ============================
 st.markdown('<div class="cyber-divider"></div>', unsafe_allow_html=True)
-st.markdown("<p style='text-align:center; color:#888; font-size:0.9rem;'>© 2026 Tofu Intelligence All Rights Reserved</p>", unsafe_allow_html=True)
+st.markdown("<p style='text-align:center; color:#FFF; font-size:0.9rem;'>© 2026 Tofu Intelligence All Rights Reserved</p>", unsafe_allow_html=True)
