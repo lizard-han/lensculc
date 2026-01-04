@@ -190,15 +190,23 @@ st.markdown("""
         text-shadow: none !important;
     }
 
-    /* ========== 修复2：Lottie 动画背景彻底透明（最强覆盖） ========== */
+    /* ========== 修复2：Lottie 动画背景白色且无边框 ========== */
+    .lottie-container {
+        background: white !important;
+        border: none !important;
+        box-shadow: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
     [data-testid="stLottie"],
     .stLottie,
     .element-container iframe,
     canvas,
-    .lottie-container,
     div[data-testid="column"] > div > div > div {
         background: transparent !important;
         background-color: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -208,6 +216,11 @@ ai_gif = load_lottiefile('lens.json')
 if not ai_gif:
     ai_gif = load_lottieurl("https://assets9.lottiefiles.com/packages/lf20_2gjwqmbb.json")
 
+# 单独显示Lottie动画（白色背景）
+st.markdown('<div class="lottie-container">', unsafe_allow_html=True)
+st_lottie(ai_gif, speed=1.5, height=400, key="Tofu")
+st.markdown('</div>', unsafe_allow_html=True)
+
 # ============================ 侧边栏（标题已纯黑色） ============================
 st.sidebar.header("🔭 功能选择 Function Selection")
 menu_selection = st.sidebar.radio(
@@ -215,13 +228,9 @@ menu_selection = st.sidebar.radio(
     ["镜头焦距计算", "视场角与自定义参数4配置", "LPP配置参考"]
 )
 
-# ============================ 主标题与动画（背景已透明） ============================
-col_lottie, col_title = st.columns([1, 3])
-with col_lottie:
-    st_lottie(ai_gif, speed=1.5, height=400, key="Tofu")
-with col_title:
-    st.markdown('<h1 class="neon-title">Tofu LensCulc</h1>', unsafe_allow_html=True)
-    st.markdown("<p style='text-align:center; font-size:1.4rem; color:#a0a0ff;'>镜头焦距与云台参数在线计算</p>", unsafe_allow_html=True)
+# ============================ 主标题（在动画下方显示） ============================
+st.markdown('<h1 class="neon-title">Tofu LensCulc</h1>', unsafe_allow_html=True)
+st.markdown("<p style='text-align:center; font-size:1.4rem; color:#a0a0ff;'>镜头焦距与云台参数在线计算</p>", unsafe_allow_html=True)
 
 st.markdown("## Product Wiki Site: [Tofu Wiki](https://tofuai.helplook.net)")
 st.markdown('<div class="cyber-divider"></div>', unsafe_allow_html=True)
