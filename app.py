@@ -224,40 +224,40 @@ st.markdown('</div>', unsafe_allow_html=True)
 # ============================ 侧边栏（标题已纯黑色） ============================
 st.sidebar.header("🔭 功能选择 Function Selection")
 menu_selection = st.sidebar.radio(
-    "请选择功能",
-    ["镜头焦距计算", "视场角与自定义参数4配置", "LPP配置参考"]
+    "功能列表 Function List",
+    ["焦距计算 Lens Culc", "视场角与参数4配置 FOV & Par4 Culc", "LPP配置参考 LPP Culc"]
 )
 
 # ============================ 主标题（在动画下方显示） ============================
 st.markdown('<h1 class="neon-title">Tofu LensCulc</h1>', unsafe_allow_html=True)
 st.markdown("<p style='text-align:center; font-size:1.4rem; color:#a0a0ff;'>镜头焦距与云台参数在线计算</p>", unsafe_allow_html=True)
 
-st.markdown("## Product Wiki Site: [Tofu Wiki](https://tofuai.helplook.net)")
+st.markdown("## Product Wiki Site: [中文](https://www.tofuwiki.com/)  [English](https://www.tofuwiki.com/en)")
 st.markdown('<div class="cyber-divider"></div>', unsafe_allow_html=True)
 
 # ============================ 功能1：镜头焦距计算 ============================
-if menu_selection == "镜头焦距计算":
-    st.markdown('<h2>🔍 镜头焦距智能推荐</h2>', unsafe_allow_html=True)
+if menu_selection == "焦距计算 Lens Culc":
+    st.markdown('<h2>🔍 镜头焦距智能推荐 Lens Culc</h2>', unsafe_allow_html=True)
     
     col1, col2 = st.columns(2)
     with col1:
-        st.subheader("📷 相机选择 Select Sensor")
-        cam_selection = st.selectbox("传感器类型", config.SENSOR_LIST)
+        st.subheader("📷 相机选择 Select Camera")
+        cam_selection = st.selectbox("传感器类型 Sensor Type", config.SENSOR_LIST)
         pix_type = config.SENSOR_LIST.index(cam_selection)
         
         st.subheader("🎯 识别目标 Detection Object")
-        obj_selection = st.selectbox("目标类型", config.OBJ_LIST)
+        obj_selection = st.selectbox("目标类型 Object Type", config.OBJ_LIST)
         obj = config.OBJ_LIST.index(obj_selection)
     
     with col2:
         st.subheader("📏 识别距离 Detection Distance")
-        DDistance = float(st.slider("距离 (米)", 300, 10000, 500))
+        DDistance = float(st.slider("距离 Distance(米)", 300, 10000, 500))
 
-    st.subheader("🚀 计算")
-    calculate = st.button('计算焦距')
+    st.subheader("🚀 计算 Culc")
+    calculate = st.button('Culculation')
 
     if calculate:
-        with st.spinner("AI 智能计算中..."):
+        with st.spinner("Running..."):
             time.sleep(0.8)
             
             pix_size = [2.9, 17, 12, 15][pix_type]
@@ -267,33 +267,33 @@ if menu_selection == "镜头焦距计算":
             Focal_Len = coeff * pix_size * DDistance / (Obj_size * 1000)
 
         st.markdown('<div class="glass-section">', unsafe_allow_html=True)
-        st.markdown('<div class="big-label">推荐镜头焦距</div>', unsafe_allow_html=True)
+        st.markdown('<div class="big-label">推荐镜头焦距 Focal Length</div>', unsafe_allow_html=True)
         st.markdown(f'<div class="big-number">{int(Focal_Len)}</div>', unsafe_allow_html=True)
         st.markdown('<div class="big-number-unit">mm</div>', unsafe_allow_html=True)
         st.markdown("</div>", unsafe_allow_html=True)
 
 # ============================ 功能2：视场角与参数4配置 ============================
-elif menu_selection == "视场角与自定义参数4配置":
-    st.markdown('<h2>📐 视场角与自定义参数4配置</h2>', unsafe_allow_html=True)
+elif menu_selection == "视场角与参数4配置 FOV & Par4 Culc":
+    st.markdown('<h2>📐 视场角与参数4配置 FOV & Par4 Culc</h2>', unsafe_allow_html=True)
     
     col1, col2 = st.columns(2)
     with col1:
-        st.subheader("🌈 可见光参数")
-        visible_pixel_size = st.number_input("可见光像元尺寸 (μm)", min_value=1.0, value=2.9, step=0.1)
-        visible_resolution = st.selectbox("可见光水平分辨率", [1920, 2560, 2688])
-        visible_focal = st.number_input("可见光镜头焦距 (mm)", min_value=1.0, value=25.0, step=1.0)
+        st.subheader("🌈 可见光参数 Visual Cam")
+        visible_pixel_size = st.number_input("像元尺寸 Pixel Size (μm)", min_value=1.0, value=2.9, step=0.1)
+        visible_resolution = st.selectbox("水平分辨率 Horizontal Resolution", [1920, 2560, 2688])
+        visible_focal = st.number_input("镜头最小焦距 Min Focal Length(mm)", min_value=1.0, value=6.0, step=1.0)
         
-        st.subheader("⚙️ 计算")
-        calculate_lpp = st.button('计算视场角与参数4')
+        st.subheader("⚙️ 计算 Culc")
+        calculate_lpp = st.button('Culculation')
     
     with col2:
-        st.subheader("🔥 红外参数")
-        ir_pixel_size = st.selectbox("红外像元尺寸 (μm)", [12, 17])
-        ir_resolution = st.selectbox("红外水平分辨率", [384, 640, 1280], index=1)
-        ir_focal = st.number_input("红外镜头焦距 (mm)", min_value=1.0, value=25.0, step=1.0)
+        st.subheader("🔥 红外参数 Thermal Cam")
+        ir_pixel_size = st.selectbox("像元尺寸 Pixel Size(μm)", [12, 17])
+        ir_resolution = st.selectbox("水平分辨率  Horizontal Resolution", [384, 640, 1280], index=1)
+        ir_focal = st.number_input("镜头最小焦距 Min Focal Length(mm)", min_value=1.0, value=25.0, step=1.0)
     
     if calculate_lpp:
-        with st.spinner("正在计算，请稍候..."):
+        with st.spinner("Running..."):
             time.sleep(0.8)
             visible_h_fov = 2 * math.atan((visible_resolution * visible_pixel_size / 1000) / (2 * visible_focal)) * (180 / math.pi)
             ir_h_fov = 2 * math.atan((ir_resolution * ir_pixel_size / 1000) / (2 * ir_focal)) * (180 / math.pi)
@@ -305,44 +305,44 @@ elif menu_selection == "视场角与自定义参数4配置":
         st.markdown('<div class="glass-section">', unsafe_allow_html=True)
         col_res1, col_res2 = st.columns(2)
         with col_res1:
-            st.markdown('<div class="big-label">可见光水平视场角</div>', unsafe_allow_html=True)
+            st.markdown('<div class="big-label">可见光水平视场角 HFOV of Visual</div>', unsafe_allow_html=True)
             st.markdown(f'<div class="medium-number">{visible_h_fov:.2f}°</div>', unsafe_allow_html=True)
         with col_res2:
-            st.markdown('<div class="big-label">红外水平视场角</div>', unsafe_allow_html=True)
+            st.markdown('<div class="big-label">红外水平视场角 HFOV of Thermal</div>', unsafe_allow_html=True)
             st.markdown(f'<div class="medium-number">{ir_h_fov:.2f}°</div>', unsafe_allow_html=True)
 
         st.markdown("<div style='margin-top:40px;'></div>", unsafe_allow_html=True)
-        st.markdown('<div class="big-label">自定义参数4 配置建议</div>', unsafe_allow_html=True)
+        st.markdown('<div class="big-label">自定义参数4 配置建议 Param4 Suggestion</div>', unsafe_allow_html=True)
         
         col_p1, col_p2 = st.columns(2)
         with col_p1:
             st.markdown('<div style="padding:20px; background:rgba(252,0,255,0.1); border-radius:12px; border:1px solid #FC00FF;">', unsafe_allow_html=True)
-            st.markdown('<div style="font-size:1.6rem; color:#a0f0ff;">LPP协议</div>', unsafe_allow_html=True)
+            st.markdown('<div style="font-size:1.6rem; color:#a0f0ff;">LPP协议 LPP Protocol</div>', unsafe_allow_html=True)
             st.markdown(f'<div class="param4-number">{math.ceil((visible_h_fov * 10) / ir_h_fov)}</div>', unsafe_allow_html=True)
             st.markdown('</div>', unsafe_allow_html=True)
         
         with col_p2:
             st.markdown('<div style="padding:20px; background:rgba(0,219,222,0.1); border-radius:12px; border:1px solid #00DBDE;">', unsafe_allow_html=True)
-            st.markdown('<div style="font-size:1.6rem; color:#a0f0ff;">脱靶量协议</div>', unsafe_allow_html=True)
+            st.markdown('<div style="font-size:1.6rem; color:#a0f0ff;">脱靶量协议 MD Protocol</div>', unsafe_allow_html=True)
             st.markdown(f'<div class="param4-number">{param4_MD}</div>', unsafe_allow_html=True)
             st.markdown('</div>', unsafe_allow_html=True)
         
         st.markdown("</div>", unsafe_allow_html=True)
 
 # ============================ 功能3：LPP配置参考 ============================
-elif menu_selection == "LPP配置参考":
-    st.markdown('<h2>⚙️ LPP配置参考计算</h2>', unsafe_allow_html=True)
+elif menu_selection == "LPP配置参考 LPP Culc":
+    st.markdown('<h2>⚙️ LPP配置计算 LPP Culc</h2>', unsafe_allow_html=True)
     
     col1, col2 = st.columns(2)
     with col1:
-        max_fov = st.number_input("相机最大视场角（°）", min_value=0.1, value=60.0, step=0.1)
+        max_fov = st.number_input("相机最大水平视场角 Max HFOV（°）", min_value=0.1, value=60.0, step=0.1)
     with col2:
-        ptz_speed = st.number_input("云台速度细分（°）", min_value=0.001, value=0.01, step=0.001, format="%.3f")
+        ptz_speed = st.number_input("云台速度细分 Gimbal Speed Gradient（°）", min_value=0.001, value=0.01, step=0.001, format="%.3f")
     
-    calculate_lpp_ref = st.button("计算LPP配置参数")
+    calculate_lpp_ref = st.button("Culculation")
     
     if calculate_lpp_ref:
-        with st.spinner("正在计算，请稍候..."):
+        with st.spinner("Running..."):
             time.sleep(0.8)
             custom_param7 = math.ceil(3.5 * max_fov / (ptz_speed * 60))
             custom_param6 = math.ceil(custom_param7 * 0.02)
@@ -350,29 +350,27 @@ elif menu_selection == "LPP配置参考":
             integral_coeff = math.ceil(motion_coeff * 0.03)
         
         st.markdown('<div class="glass-section">', unsafe_allow_html=True)
-        st.markdown('<div class="big-label">LPP 参数配置推荐</div>', unsafe_allow_html=True)
+        st.markdown('<div class="big-label">LPP 参数配置推荐 Params Suggestion</div>', unsafe_allow_html=True)
         
-        cols = st.columns(3)
+        cols = st.columns(2)
         with cols[0]:
-            st.markdown('<div style="font-size:1.4rem; color:#a0f0ff;">自定义参数5</div>', unsafe_allow_html=True)
+            st.markdown('<div style="font-size:1.4rem; color:#a0f0ff; margin-top:30px;">参数5 Param5</div>', unsafe_allow_html=True)
             st.markdown('<div class="medium-number">1</div>', unsafe_allow_html=True)
-            st.markdown('<div style="font-size:1.4rem; color:#a0f0ff; margin-top:30px;">自定义参数6</div>', unsafe_allow_html=True)
+            st.markdown('<div style="font-size:1.4rem; color:#a0f0ff; margin-top:30px;">参数6 Param6</div>', unsafe_allow_html=True)
             st.markdown(f'<div class="medium-number">{custom_param6}</div>', unsafe_allow_html=True)
+            st.markdown('<div style="font-size:1.4rem; color:#a0f0ff; margin-top:30px;">参数7 Param7</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="medium-number">{custom_param7}</div>', unsafe_allow_html=True)
         
         with cols[1]:
-            st.markdown('<div style="font-size:1.4rem; color:#a0f0ff;">自定义参数7</div>', unsafe_allow_html=True)
-            st.markdown(f'<div class="medium-number">{custom_param7}</div>', unsafe_allow_html=True)
-            st.markdown('<div style="font-size:1.4rem; color:#a0f0ff; margin-top:30px;">运动系数</div>', unsafe_allow_html=True)
+            st.markdown('<div style="font-size:1.4rem; color:#a0f0ff; margin-top:30px;">运动系数 Speed Gradient</div>', unsafe_allow_html=True)
             st.markdown(f'<div class="medium-number">{motion_coeff}</div>', unsafe_allow_html=True)
-        
-        with cols[2]:
-            st.markdown('<div style="font-size:1.4rem; color:#a0f0ff;">差分系数</div>', unsafe_allow_html=True)
+            st.markdown('<div style="font-size:1.4rem; color:#a0f0ff; margin-top:30px;">差分系数 Diff Coef</div>', unsafe_allow_html=True)
             st.markdown('<div class="medium-number">55</div>', unsafe_allow_html=True)
-            st.markdown('<div style="font-size:1.4rem; color:#a0f0ff; margin-top:30px;">积分系数</div>', unsafe_allow_html=True)
+            st.markdown('<div style="font-size:1.4rem; color:#a0f0ff; margin-top:30px;">积分系数 Int Coef</div>', unsafe_allow_html=True)
             st.markdown(f'<div class="medium-number">{integral_coeff}</div>', unsafe_allow_html=True)
         
         st.markdown("</div>", unsafe_allow_html=True)
 
 # ============================ 页脚 ============================
 st.markdown('<div class="cyber-divider"></div>', unsafe_allow_html=True)
-st.markdown("<p style='text-align:center; color:#FFF; font-size:0.9rem;'>© 2026 Tofu Intelligence All Rights Reserved</p>", unsafe_allow_html=True)
+st.markdown("<p style='text-align:center; color:#FFF; font-size:0.9rem;'>© 2026 Tofu Intelligence</p>", unsafe_allow_html=True)
